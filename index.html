@@ -61,8 +61,8 @@
 <header>
   <nav class="bar" role="tablist">
     <span class="label">Proposal:</span>
-    <button class="tab" role="tab" data-id="indoor">Indoor Robotic Perception</button>
     <button class="tab" role="tab" data-id="anchor">Task-Aware Anchor–Delta</button>
+    <button class="tab" role="tab" data-id="indoor">Indoor Robotic Perception</button>
   </nav>
 </header>
 <main><article id="doc"><p class="status">Loading…</p></article></main>
@@ -89,7 +89,7 @@
   }
 
   async function show(id) {
-    if (!DOCS[id]) id = "indoor";
+    if (!DOCS[id]) id = "anchor";
     document.querySelectorAll(".tab").forEach(b =>
       b.setAttribute("aria-selected", b.dataset.id === id));
     if (!cache[id]) {
