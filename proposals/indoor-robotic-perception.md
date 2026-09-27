@@ -43,12 +43,12 @@ Adaptive aggregation and feature reuse already have substantial precedents. The 
 
 | Related work | Established direction | Role in this study |
 |---|---|---|
-| DoppDrive, ICCV 2025 [5] | Doppler-based compensation and selection of radar aggregation durations | Required methodological comparison where the necessary radar fields are available. |
-| Towards High Performance Video Object Detection, CVPR 2018 [6] | Adaptive keyframes and temporal feature reuse | Basis for quality-driven visual refresh comparisons. |
-| TARSS-Net, NeurIPS 2024 [7] | Temporal relationships for radar semantic segmentation | Modeling reference; its segmentation network is not a directly comparable detector. |
-| VLA-Cache, NeurIPS 2025 [8] | Reuse of visual tokens in robot policy inference | Related efficiency principle; the proposed task evaluates 3D detection rather than manipulation policies. |
-| M³Detection, 2025 preprint [9] | Multi-frame radar–camera detection with feature reuse and trajectory reasoning | Close related work that must be considered when defining the contribution. |
-| R4Det, CVPR 2026 [10] | Radar–camera detection with pose-free temporal fusion | Strong external detector comparison and a test of whether improved temporal fusion reduces the need for the proposed selector. |
+| DoppDrive, ICCV 2025 | Doppler-based compensation and selection of radar aggregation durations | Required methodological comparison where the necessary radar fields are available. |
+| Towards High Performance Video Object Detection, CVPR 2018 | Adaptive keyframes and temporal feature reuse | Basis for quality-driven visual refresh comparisons. |
+| TARSS-Net, NeurIPS 2024 | Temporal relationships for radar semantic segmentation | Modeling reference; its segmentation network is not a directly comparable detector. |
+| VLA-Cache, NeurIPS 2025 | Reuse of visual tokens in robot policy inference | Related efficiency principle; the proposed task evaluates 3D detection rather than manipulation policies. |
+| M³Detection, 2025 preprint | Multi-frame radar–camera detection with feature reuse and trajectory reasoning | Close related work that must be considered when defining the contribution. |
+| R4Det, CVPR 2026 | Radar–camera detection with pose-free temporal fusion | Strong external detector comparison and a test of whether improved temporal fusion reduces the need for the proposed selector. |
 
 The candidate contribution is **a lightweight, causal decision module that coordinates radar history and visual refresh using observation quality, alignment reliability, and measured cost**. Its novelty remains a hypothesis to establish through literature review and experiments.
 
@@ -111,7 +111,7 @@ $$
 
 This projection uses radar geometry and relative pose without requiring a new dense depth estimate at every frame. It is only a correspondence approximation: old pixels can describe occluders or moving objects. Projection validity, anchor age, viewpoint change, and available geometric consistency checks therefore produce a validity mask. Newly exposed regions without trustworthy correspondence receive no cached visual feature.
 
-A fusion gate weights valid visual evidence. The same gate is available to all comparable baselines; gating gains are evaluated separately from scheduling gains. The minimal radar-supported fusion design may miss objects with few or no radar returns. Such failures are reported, and R4Det provides a relevant stronger comparison [10].
+A fusion gate weights valid visual evidence. The same gate is available to all comparable baselines; gating gains are evaluated separately from scheduling gains. The minimal radar-supported fusion design may miss objects with few or no radar returns. Such failures are reported, and R4Det provides a relevant stronger comparison.
 
 ### 4.4 Lightweight decision features
 
@@ -157,16 +157,16 @@ Dataset descriptions below were checked against author or official sources in Se
 
 | Dataset | Relevant data | Proposed validation role | Access or interpretation limit |
 |---|---|---|---|
-| **Indoor FireRescue Radar (IFR)** [1] | Approximately 27,000 synchronized multimodal frames across 10 buildings and 35 layouts; RGB, 4D radar, IMU, LiDAR, poses, and 3D boxes | Primary indoor door/obstacle detection; history selection, cache refresh, and held-out-building evaluation | Public demonstration subset; full data require a request. Confirm complete sequences and condition coverage before fixing the experiment. |
-| **View-of-Delft (VoD)** [2] | More than 8,600 synchronized automotive frames; radar, cameras, LiDAR, odometry, and 3D road-user labels with tracking IDs | Main external replication candidate: moving objects, different motion, and different radar characteristics | Academic access request required. Outdoor road-user results do not establish indoor deployment performance. |
-| **TJ4DRadSet** [3] | 7,757 annotated frames in 44 sequences; radar and 3D labels; the recorded dataset includes camera/LiDAR and varying illumination | Conditional replication under darkness and dynamic traffic; radar-history tests if only radar is available | The official repository currently warns that only complete 4D radar data are released. Confirm actual synchronized RGB access before committing to fusion or visual-refresh experiments. |
-| **NTU4DRadLM** [4] | Radar, RGB, thermal, IMU, LiDAR, and reference odometry across six outdoor trajectories | Optional diagnostic for motion estimation, alignment residuals, and cache behavior | Primarily a localization/mapping dataset. Do not assume detection boxes exist or report detection AP without added annotations. |
+| **Indoor FireRescue Radar (IFR)** | Approximately 27,000 synchronized multimodal frames across 10 buildings and 35 layouts; RGB, 4D radar, IMU, LiDAR, poses, and 3D boxes | Primary indoor door/obstacle detection; history selection, cache refresh, and held-out-building evaluation | Public demonstration subset; full data require a request. Confirm complete sequences and condition coverage before fixing the experiment. |
+| **View-of-Delft (VoD)** | More than 8,600 synchronized automotive frames; radar, cameras, LiDAR, odometry, and 3D road-user labels with tracking IDs | Main external replication candidate: moving objects, different motion, and different radar characteristics | Academic access request required. Outdoor road-user results do not establish indoor deployment performance. |
+| **TJ4DRadSet** | 7,757 annotated frames in 44 sequences; radar and 3D labels; the recorded dataset includes camera/LiDAR and varying illumination | Conditional replication under darkness and dynamic traffic; radar-history tests if only radar is available | The official repository currently warns that only complete 4D radar data are released. Confirm actual synchronized RGB access before committing to fusion or visual-refresh experiments. |
+| **NTU4DRadLM** | Radar, RGB, thermal, IMU, LiDAR, and reference odometry across six outdoor trajectories | Optional diagnostic for motion estimation, alignment residuals, and cache behavior | Primarily a localization/mapping dataset. Do not assume detection boxes exist or report detection AP without added annotations. |
 
 **Minimum empirical scope:** IFR plus one accessible external detection dataset. VoD is preferred for the second dataset; TJ4DRadSet is a conditional alternative. NTU4DRadLM diagnostics cannot replace the second detection experiment. Each dataset is trained and evaluated with its own classes; replication across datasets is distinct from zero-shot transfer.
 
 ### 6.1 Indoor task and label mapping
 
-The first IFR experiment uses two evaluation classes: **door** and **obstacle**. The obstacle category combines desk/chair, cabinet, and waste-container labels, following the aggregation supported in the data description [1]. Other annotated categories receive an explicit ignore policy. This subset does not cover every possible obstacle.
+The first IFR experiment uses two evaluation classes: **door** and **obstacle**. The obstacle category combines desk/chair, cabinet, and waste-container labels, following the aggregation supported in the data description. Other annotated categories receive an explicit ignore policy. This subset does not cover every possible obstacle.
 
 The mapping, detection range, box convention, and minimum class support are fixed during data preparation. A broader class-wise experiment follows only if label counts support it. Public sample performance is not used to claim generalization across buildings.
 
@@ -198,9 +198,9 @@ Fixed refresh intervals initially include 1, 2, 4, and 8 processing steps. Sweep
 
 ### 7.2 Related-method comparisons
 
-DoppDrive must be assessed where Doppler and calibration fields support adaptation. Its inspected repository currently contains a README rather than a complete implementation [5]; any local implementation must be labeled and its checks documented. If required inputs are unavailable, the limitation must be explicit and the novelty claim narrowed.
+DoppDrive must be assessed where Doppler and calibration fields support adaptation. Its inspected repository currently contains a README rather than a complete implementation; any local implementation must be labeled and its checks documented. If required inputs are unavailable, the limitation must be explicit and the novelty claim narrowed.
 
-R4Det has an official implementation and is the preferred stronger radar–camera comparator [10]. M³Detection is another close temporal-fusion comparator [9], subject to implementation availability. Their native architectures are evaluated as external references; swapping entire detectors is not evidence that the proposed scheduling mechanism caused an improvement.
+R4Det has an official implementation and is the preferred stronger radar–camera comparator. M³Detection is another close temporal-fusion comparator, subject to implementation availability. Their native architectures are evaluated as external references; swapping entire detectors is not evidence that the proposed scheduling mechanism caused an improvement.
 
 ### 7.3 Ablations and stress tests
 
@@ -295,18 +295,3 @@ The expected scientific outcome is evidence about **when historical radar remain
 The work extends the temporal-window question in DWA and the update-timing question in Anchor–Delta. It tests those ideas in perception without assuming that results from robot manipulation automatically transfer to radar–camera detection.
 
 Later work may study short-term prediction of perceptual state, interaction with a Unity environment, or navigation around temporary obstacles. World-model or navigation experiments would require action-conditioned sequences, independent simulation validation, and closed-loop measures such as goal success, collision frequency, and recovery time. These extensions follow successful perception validation and are outside the initial acceptance criteria.
-
-## References and Data Sources
-
-1. Duan, K., Zhu, Z., and Zou, Z. **Indoor FireRescue Radar: 4D Indoor Millimeter Wave Dataset and Analysis for Hazardous Environment Perception.** IROS, 2025. [Official dataset, labels, sensors, and access](https://huggingface.co/datasets/yysd123/indoor_mmwave).
-2. Palffy, A., et al. **Multi-Class Road User Detection With 3+1D Radar in the View-of-Delft Dataset.** IEEE Robotics and Automation Letters, 2022. [Official repository and access procedure](https://github.com/tudelft-iv/view-of-delft-dataset).
-3. Zheng, L., et al. **TJ4DRadSet: A 4D Radar Dataset for Autonomous Driving.** ITSC, 2022. [Paper](https://arxiv.org/abs/2204.13483) · [Official repository and release limitations](https://github.com/TJRadarLab/TJ4DRadSet).
-4. Zhang, J., et al. **NTU4DRadLM: 4D Radar-Centric Multi-Modal Dataset for Localization and Mapping.** ITSC, 2023. [Paper](https://arxiv.org/abs/2309.00962) · [Official repository](https://github.com/junzhang2016/NTU4DRadLM).
-5. Haitman, Y., and Bialer, O. **DoppDrive: Doppler-Driven Temporal Aggregation for Improved Radar Object Detection.** ICCV, 2025. [Paper](https://arxiv.org/abs/2508.12330) · [Author repository](https://github.com/yuvalHG/DoppDrive).
-6. Zhu, X., Dai, J., Yuan, L., and Wei, Y. **Towards High Performance Video Object Detection.** CVPR, 2018. [Paper](https://openaccess.thecvf.com/content_cvpr_2018/html/Zhu_Towards_High_Performance_CVPR_2018_paper.html).
-7. Zhang, Y., et al. **TARSS-Net: Temporal-Aware Radar Semantic Segmentation Network.** NeurIPS, 2024. [Paper](https://proceedings.neurips.cc/paper_files/paper/2024/hash/08a362bd4ae1934e099ce025f06039fe-Abstract-Conference.html).
-8. **VLA-Cache: Efficient Vision-Language-Action Manipulation via Adaptive Token Caching.** NeurIPS, 2025. [Paper](https://proceedings.neurips.cc/paper_files/paper/2025/hash/f062da1973ac9ac61fc6d44dd7fa309f-Abstract-Conference.html) · [Official code](https://github.com/siyuhsu/vla-cache).
-9. Li, X., et al. **M³Detection: Multi-Frame Multi-Level Feature Fusion for Multi-Modal 3D Object Detection with Camera and 4D Imaging Radar.** arXiv preprint, 2025. [Paper](https://arxiv.org/abs/2510.27166).
-10. Xia, Z., et al. **R4Det: 4D Radar-Camera Fusion for High-Performance 3D Object Detection.** CVPR, 2026. [Paper](https://arxiv.org/abs/2603.11566) · [Official code](https://github.com/VDIGPKU/R4Det).
-
-*Source descriptions were checked in September 2026. Proposed architectures, thresholds, schedules, and acceptance targets in this document are research design choices, not reported outcomes from those sources.*
